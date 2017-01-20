@@ -6,12 +6,14 @@ import {
   DefaultStyleCompatibilityModeModule,
   OverlayModule,
 } from '../core';
+import {MdInputModule} from '../input/input';
+import {FormsModule} from '@angular/forms';
 export * from './select';
 export {fadeInContent, transformPanel, transformPlaceholder} from './select-animations';
 
 
 @NgModule({
-  imports: [CommonModule, OverlayModule, MdOptionModule, DefaultStyleCompatibilityModeModule],
+  imports: [CommonModule, OverlayModule, MdOptionModule, MdInputModule, DefaultStyleCompatibilityModeModule, FormsModule],
   exports: [MdSelect, MdOptionModule, DefaultStyleCompatibilityModeModule],
   declarations: [MdSelect],
 })

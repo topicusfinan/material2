@@ -222,6 +222,14 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
   get required() { return this._required; }
   set required(value: any) { this._required = coerceBooleanProperty(value); }
 
+  /** An optional search function. */
+  @Input()
+  get search() { return this._search; }
+  set search(searchFn: (query:string, value: any) => boolean) {
+    this._search = searchFn;
+  }
+  private _search: (query:string, value: any) => boolean = null;
+
   /** Event emitted when the select has been opened. */
   @Output() onOpen: EventEmitter<void> = new EventEmitter<void>();
 
@@ -272,6 +280,9 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
     this._calculateOverlayPosition();
     this._placeholderState = this._isRtl() ? 'floating-rtl' : 'floating-ltr';
     this._panelOpen = true;
+    if (typeof this._search === 'function') {
+      this._onSearch('');
+    }
   }
 
   /** Closes the overlay panel and focuses the host element. */
@@ -410,6 +421,16 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
     scrollContainer.scrollTop = this._scrollTop;
   }
 
+  _onSearch(query:string) {
+    this.options.forEach((option:MdOption) => {
+      if (!this._search(query, option.value)) {
+        option._getHostElement().setAttribute('hidden', 'true');
+      } else {
+        option._getHostElement().removeAttribute('hidden');
+      }
+    });
+  }
+
   /**
    * Sets the selected option based on a value. If no option can be
    * found with the designated value, the select trigger is cleared.
@@ -546,7 +567,7 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
     // The farthest the panel can be scrolled before it hits the bottom
     const maxScroll = scrollContainerHeight - panelHeight;
 
-    if (this.selected) {
+    if (this.selected && !this._search) {
       const selectedIndex = this._getOptionIndex(this.selected);
       // We must maintain a scroll buffer so the selected option will be scrolled to the
       // center of the overlay panel rather than the top.

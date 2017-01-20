@@ -10,9 +10,12 @@ import {MdSelectChange} from '@angular/material';
 })
 export class SelectDemo {
   isRequired = false;
+  movieRequired = false;
   isDisabled = false;
+  moviesDisabled = false;
   showSelect = false;
   currentDrink: string;
+  currentMovie: string;
   latestChangeEvent: MdSelectChange;
   foodControl = new FormControl('pizza-1');
 
@@ -40,7 +43,22 @@ export class SelectDemo {
     {value: 'squirtle-2', viewValue: 'Squirtle'}
   ];
 
+  movies = [
+    {value: 'moonraker-0', viewValue: 'Moonraker'},
+    {value: 'goldfinger-1', viewValue: 'Sprite'},
+    {value: 'thunderball-2', viewValue: 'Water'},
+    {value: 'dr-no-3', viewValue: 'Dr. No'},
+    {value: 'octopussy-4', viewValue: 'Octopussy'},
+    {value: 'goldeneye-5', viewValue: 'Goldeneye'},
+    {value: 'skyfall-6', viewValue: 'Skyfall'},
+    {value: 'spectre-7', viewValue: 'Spectre'}
+  ];
+
   toggleDisabled() {
     this.foodControl.enabled ? this.foodControl.disable() : this.foodControl.enable();
+  }
+
+  filter(query:string, value:string):boolean {
+    return value.toLowerCase().indexOf(query.toLowerCase()) !== -1;
   }
 }
