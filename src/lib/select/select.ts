@@ -225,10 +225,10 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
   /** An optional search function. */
   @Input()
   get search() { return this._search; }
-  set search(searchFn: (query:string, value: any) => boolean) {
-    this._search = searchFn;
+  set search(search: boolean) {
+    this._search = search;
   }
-  private _search: (query:string, value: any) => boolean = null;
+  private _search: boolean;
 
   /** Event emitted when the select has been opened. */
   @Output() onOpen: EventEmitter<void> = new EventEmitter<void>();
@@ -423,7 +423,8 @@ export class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestr
 
   _onSearch(query:string) {
     this.options.forEach((option:MdOption) => {
-      if (!this._search(query, option.value)) {
+      let queryIndex = option.value.toLowerCase().indexOf(query.toLowerCase());
+      if (queryIndex === -1) {
         option._getHostElement().setAttribute('hidden', 'true');
       } else {
         option._getHostElement().removeAttribute('hidden');

@@ -57,8 +57,4 @@ export class SelectDemo {
   toggleDisabled() {
     this.foodControl.enabled ? this.foodControl.disable() : this.foodControl.enable();
   }
-
-  filter(query:string, value:string):boolean {
-    return value.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-  }
 }
